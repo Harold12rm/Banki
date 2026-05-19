@@ -1,7 +1,7 @@
 ﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseServerClient, getCurrentUser } from "@/lib/supabase/server";
 
 async function signup(formData: FormData) {
   "use server";
@@ -49,6 +49,12 @@ export default async function SignupPage({
     error?: string;
   }>;
 }) {
+  const user = await getCurrentUser();
+
+  if (user) {
+    redirect("/dashboard");
+  }
+
   const params = await searchParams;
 
   return (
