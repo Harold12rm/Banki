@@ -160,7 +160,7 @@ export default async function BankDetailPage({
     new Set<string>(
       allQuestions
         .map((question: { topic: string | null }) => question.topic)
-        .filter((topic): topic is string => Boolean(topic))
+        .filter((topic: string | null): topic is string => Boolean(topic))
     )
   ).sort();
 
