@@ -157,7 +157,7 @@ export default async function BankDetailPage({
   });
 
   const topics = Array.from(
-    new Set(allQuestions.map((question) => question.topic).filter(Boolean))
+    new Set(allQuestions.map((question: { topic: string }) => question.topic).filter(Boolean))
   ).sort();
 
   const easyCount = allQuestions.filter(
@@ -375,7 +375,7 @@ export default async function BankDetailPage({
           </div>
         ) : (
           <div className="space-y-4">
-            {questions.map((question, index) => {
+            {questions.map((question: { id: string; prompt: string; topic: string; subtopic: string | null; difficulty: string; explanation: string; options: { id: string; text: string; isCorrect: boolean }[] }, index: number) => {
               const correctOption = question.options.find(
                 (option) => option.isCorrect
               );
