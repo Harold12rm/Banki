@@ -137,7 +137,32 @@ export default async function ReviewSessionPage({
   });
 
   const questions = shuffleArray(
-    progressItems.map((item) => item.question)
+    progressItems.map(
+    (item: {
+      question: {
+        id: string;
+        prompt: string;
+        explanation: string;
+        topic: string;
+        subtopic: string | null;
+        difficulty: string;
+        createdAt: Date;
+        bankId: string;
+        options: {
+          id: string;
+          text: string;
+          isCorrect: boolean;
+          questionId: string;
+        }[];
+        bank: {
+          id: string;
+          name: string;
+          subject: string | null;
+          createdAt: Date;
+        };
+      };
+    }) => item.question
+  )
   ).slice(0, limit);
 
   if (questions.length === 0) {

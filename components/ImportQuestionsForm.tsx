@@ -186,7 +186,7 @@ export default function ImportQuestionsForm({
     return Array.from(new Set(csvBanks));
   }, [rows]);
 
-  const selectedBank = banks.find((bank) => bank.id === targetBankId);
+  const selectedBank = banks.find((bank: BankOption) => bank.id === targetBankId);
 
   const rowIssues = useMemo(() => {
     return rows.flatMap((row, index) => validateRow(row, index, targetBankId));
@@ -320,7 +320,7 @@ export default function ImportQuestionsForm({
           >
             <option value="">Usar la columna BANK del CSV</option>
 
-            {banks.map((bank) => (
+            {banks.map((bank: BankOption) => (
               <option key={bank.id} value={bank.id}>
                 {bank.name}
                 {bank.subject ? ` · ${bank.subject}` : ""}
@@ -420,7 +420,7 @@ export default function ImportQuestionsForm({
             </p>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {columns.map((column) => (
+              {columns.map((column: string) => (
                 <span
                   key={column}
                   className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-slate-700 ring-1 ring-slate-200"
@@ -477,7 +477,7 @@ export default function ImportQuestionsForm({
             </p>
 
             <div className="mt-3 flex flex-wrap gap-2">
-              {detectedBanks.map((bank) => (
+              {detectedBanks.map((bank: string) => (
                 <span
                   key={bank}
                   className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-blue-800 ring-1 ring-blue-200"

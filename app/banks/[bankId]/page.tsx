@@ -298,7 +298,7 @@ export default async function BankDetailPage({
             >
               <option value="">Todos los temas</option>
 
-              {topics.map((item) => (
+              {topics.map((item: string) => (
                 <option key={item} value={item}>
                   {item}
                 </option>
@@ -431,7 +431,7 @@ export default async function BankDetailPage({
                   </div>
 
                   <div className="mt-5 grid gap-3">
-                    {question.options.map((option) => (
+                    {question.options.map((option: { id: string; text: string; isCorrect: boolean }) => (
                       <div
                         key={option.id}
                         className={

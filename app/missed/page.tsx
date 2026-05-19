@@ -2,6 +2,20 @@
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/supabase/server";
 
+type MissedQuestion = {
+  id: string;
+  prompt: string;
+  explanation: string;
+  topic: string;
+  subtopic: string | null;
+  difficulty: string;
+  options: {
+    id: string;
+    text: string;
+    isCorrect: boolean;
+  }[];
+};
+
 export default async function MissedPage() {
   const user = await getCurrentUser();
 
@@ -30,9 +44,9 @@ export default async function MissedPage() {
     },
   });
 
-  const uniqueQuestions = Array.from(
+  const uniqueQuestions: MissedQuestion[] = Array.from(
     new Map(
-      missedAnswers.map((answer) => [answer.question.id, answer.question])
+      missedAnswers.map((answer: { question: MissedQuestion }) => [answer.question.id, answer.question])
     ).values()
   );
 
@@ -67,9 +81,9 @@ export default async function MissedPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {uniqueQuestions.map((question) => {
+            {uniqueQuestions.map((question: MissedQuestion) => {
               const correctOption = question.options.find(
-                (option) => option.isCorrect
+                (option: { id: string; text: string; isCorrect: boolean }) => option.isCorrect
               );
 
               return (

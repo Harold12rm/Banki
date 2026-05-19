@@ -118,7 +118,7 @@ export default async function PracticePage() {
           </section>
         ) : (
           <section className="space-y-5">
-            {banks.map((bank) => (
+            {banks.map((bank: { id: string; name: string; subject: string | null; _count: { questions: number } }) => (
               <article
                 key={bank.id}
                 className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"

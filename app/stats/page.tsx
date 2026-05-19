@@ -36,7 +36,7 @@ function getLastSevenDays() {
 
 function calculateDailyStreak(answerDates: Date[]) {
   const answeredDays = new Set(
-    answerDates.map((date) => formatDateKey(startOfDay(date)))
+    answerDates.map((date: Date) => formatDateKey(startOfDay(date)))
   );
 
   let streak = 0;
@@ -95,7 +95,7 @@ export default async function StatsPage() {
   });
 
   const total = answers.length;
-  const correct = answers.filter((answer) => answer.isCorrect).length;
+  const correct = answers.filter((answer: { isCorrect: boolean }) => answer.isCorrect).length;
   const wrong = total - correct;
   const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
 
@@ -112,17 +112,17 @@ export default async function StatsPage() {
   );
 
   const streak = calculateDailyStreak(
-    answers.map((answer) => answer.answeredAt)
+    answers.map((answer: { answeredAt: Date }) => answer.answeredAt)
   );
 
   const lastSevenDays = getLastSevenDays();
 
-  const activityRows = lastSevenDays.map((day) => {
+  const activityRows = lastSevenDays.map((day: { date: Date; key: string; label: string }) => {
     const dayAnswers = answers.filter(
       (answer) => formatDateKey(startOfDay(answer.answeredAt)) === day.key
     );
 
-    const dayCorrect = dayAnswers.filter((answer) => answer.isCorrect).length;
+    const dayCorrect = dayAnswers.filter((answer: { isCorrect: boolean }) => answer.isCorrect).length;
 
     return {
       label: day.label,
@@ -276,7 +276,7 @@ export default async function StatsPage() {
           </p>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-7">
-            {activityRows.map((day) => (
+            {activityRows.map((day: { label: string; total: number; correct: number; wrong: number }) => (
               <div
                 key={day.label}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
@@ -372,7 +372,7 @@ export default async function StatsPage() {
             </p>
           ) : (
             <div className="mt-5 space-y-3">
-              {weakQuestions.slice(0, 8).map((item) => (
+              {weakQuestions.slice(0, 8).map((item: { id: string; question: { prompt: string; bank: { name: string }; topic: string }; wrongCount: number; wrongStreak: number }) => (
                 <div
                   key={item.id}
                   className="rounded-2xl border border-red-100 bg-red-50 p-4"
@@ -400,7 +400,7 @@ export default async function StatsPage() {
             <p className="mt-3 text-slate-700">AÃºn no hay respuestas.</p>
           ) : (
             <div className="mt-5 space-y-3">
-              {answers.slice(0, 12).map((answer) => (
+              {answers.slice(0, 12).map((answer: { id: string; isCorrect: boolean; answeredAt: Date; question: { prompt: string; bank: { name: string }; topic: string } }) => (
                 <div
                   key={answer.id}
                   className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
@@ -460,7 +460,7 @@ function StatsTable({
         </thead>
 
         <tbody>
-          {rows.map((row) => (
+          {rows.map((row: { label: string; total: number; correct: number; wrong: number; percent: number }) => (
             <tr
               key={row.label}
               className="border-b border-slate-100 last:border-b-0"

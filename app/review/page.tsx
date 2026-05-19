@@ -44,14 +44,14 @@ export default async function ReviewPage() {
   });
 
   const topics = Array.from(
-    new Set(progress.map((item) => item.question.topic).filter(Boolean))
+    new Set<string>(progress.map((item: { question: { topic: string } }) => item.question.topic).filter((topic: string): topic is string => Boolean(topic)))
   ).sort();
 
   const dueCount = progress.filter(
     (item) => item.nextReviewAt && item.nextReviewAt <= now
   ).length;
 
-  const redCount = progress.filter((item) => item.status === "red").length;
+  const redCount = progress.filter((item: { status: string }) => item.status === "red").length;
 
   const learningCount = progress.filter(
     (item) => item.status === "learning"
@@ -175,7 +175,7 @@ export default async function ReviewPage() {
             >
               <option value="">Todos los bancos</option>
 
-              {banks.map((bank) => (
+              {banks.map((bank: { id: string; name: string; subject: string | null }) => (
                 <option key={bank.id} value={bank.id}>
                   {bank.name}
                   {bank.subject ? ` Â· ${bank.subject}` : ""}
@@ -190,7 +190,7 @@ export default async function ReviewPage() {
             >
               <option value="">Todos los temas</option>
 
-              {topics.map((topic) => (
+              {topics.map((topic: string) => (
                 <option key={topic} value={topic}>
                   {topic}
                 </option>

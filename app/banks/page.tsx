@@ -4,6 +4,17 @@ import { prisma } from "@/lib/prisma";
 import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
 import { getCurrentProfile } from "@/lib/auth";
 
+
+type BankListItem = {
+  id: string;
+  name: string;
+  subject: string | null;
+  createdAt: Date;
+  _count: {
+    questions: number;
+  };
+};
+
 async function deleteBank(bankId: string) {
   "use server";
 
@@ -68,7 +79,7 @@ async function deleteBank(bankId: string) {
 }
 
 export default async function BanksPage() {
-  const banks = await prisma.questionBank.findMany({
+  const banks: BankListItem[] = await prisma.questionBank.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -155,7 +166,7 @@ export default async function BanksPage() {
           </div>
         ) : (
           <div className="grid gap-5 lg:grid-cols-2">
-            {banks.map((bank) => (
+            {banks.map((bank: BankListItem) => (
               <article
                 key={bank.id}
                 className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"

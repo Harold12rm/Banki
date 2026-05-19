@@ -100,7 +100,7 @@ export default function PracticeSession({
             </p>
           ) : (
             <div className="mt-4 space-y-3">
-              {wrongQuestions.map((question) => (
+              {wrongQuestions.map((question: Question) => (
                 <div
                   key={question.id}
                   className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
@@ -138,7 +138,7 @@ export default function PracticeSession({
     (option) => option.id === selectedId
   );
 
-  const correctOption = question.options.find((option) => option.isCorrect);
+  const correctOption = question.options.find((option: Option) => option.isCorrect);
 
   const isCorrect = Boolean(selectedOption?.isCorrect);
 
@@ -200,7 +200,7 @@ export default function PracticeSession({
       </header>
 
       <div className="space-y-3 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        {question.options.map((option) => {
+        {question.options.map((option: Option) => {
           const selected = selectedId === option.id;
           const showCorrect = answered && option.isCorrect;
           const showWrong = answered && selected && !option.isCorrect;
@@ -284,8 +284,8 @@ export default function PracticeSession({
 }
 
 function exportWrongToAnki(wrongQuestions: Question[]) {
-  const rows = wrongQuestions.map((question) => {
-    const correct = question.options.find((option) => option.isCorrect);
+  const rows = wrongQuestions.map((question: Question) => {
+    const correct = question.options.find((option: Option) => option.isCorrect);
 
     const front = question.prompt;
 
@@ -315,8 +315,8 @@ function exportWrongToAnki(wrongQuestions: Question[]) {
   });
 
   const csv = [["Front", "Back", "Tags"], ...rows]
-    .map((row) =>
-      row.map((cell) => `"${String(cell).replaceAll('"', '""')}"`).join(",")
+    .map((row: string[]) =>
+      row.map((cell: string) => `"${String(cell).replaceAll('"', '""')}"`).join(",")
     )
     .join("\n");
 
