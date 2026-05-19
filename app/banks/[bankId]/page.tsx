@@ -156,8 +156,12 @@ export default async function BankDetailPage({
     },
   });
 
-  const topics = Array.from(
-    new Set(allQuestions.map((question: { topic: string }) => question.topic).filter(Boolean))
+  const topics: string[] = Array.from(
+    new Set<string>(
+      allQuestions
+        .map((question: { topic: string | null }) => question.topic)
+        .filter((topic): topic is string => Boolean(topic))
+    )
   ).sort();
 
   const easyCount = allQuestions.filter(
