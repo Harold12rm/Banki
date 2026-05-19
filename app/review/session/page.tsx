@@ -6,8 +6,17 @@ export const revalidate = 0;
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import PracticeSession from "@/components/PracticeSession";
+import type { PracticeQuestion } from "@/lib/practice-question";
 
-function shuffleArray<T>(array: T[]) {
+type ReviewQuestion = PracticeQuestion & {
+  bankId: string;
+};
+
+type ProgressQuestionItem = {
+  question: ReviewQuestion;
+};
+
+function shuffleArray<T>(array: readonly T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }
 
@@ -58,7 +67,7 @@ export default async function ReviewSessionPage({
   const topic = params.topic || "";
   const difficulty = params.difficulty || "";
 
-  const progressItems = await prisma.questionProgress.findMany({
+  const progressItems = (await prisma.questionProgress.findMany({
     where: {
       userId,
 
@@ -117,9 +126,21 @@ export default async function ReviewSessionPage({
     },
     include: {
       question: {
-        include: {
-          options: true,
-          bank: true,
+        select: {
+          id: true,
+          prompt: true,
+          explanation: true,
+          topic: true,
+          subtopic: true,
+          difficulty: true,
+          bankId: true,
+          options: {
+            select: {
+              id: true,
+              text: true,
+              isCorrect: true,
+            },
+          },
         },
       },
     },
@@ -134,35 +155,10 @@ export default async function ReviewSessionPage({
         updatedAt: "desc",
       },
     ],
-  });
+  })) as ProgressQuestionItem[];
 
-  const questions = shuffleArray(
-    progressItems.map(
-    (item: {
-      question: {
-        id: string;
-        prompt: string;
-        explanation: string;
-        topic: string;
-        subtopic: string | null;
-        difficulty: string;
-        createdAt: Date;
-        bankId: string;
-        options: {
-          id: string;
-          text: string;
-          isCorrect: boolean;
-          questionId: string;
-        }[];
-        bank: {
-          id: string;
-          name: string;
-          subject: string | null;
-          createdAt: Date;
-        };
-      };
-    }) => item.question
-  )
+  const questions: ReviewQuestion[] = shuffleArray(
+    progressItems.map((item) => item.question)
   ).slice(0, limit);
 
   if (questions.length === 0) {

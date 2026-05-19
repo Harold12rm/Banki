@@ -2,8 +2,9 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import PracticeSession from "@/components/PracticeSession";
 import { getCurrentUser } from "@/lib/supabase/server";
+import type { PracticeQuestion } from "@/lib/practice-question";
 
-function shuffleArray<T>(array: T[]) {
+function shuffleArray<T>(array: readonly T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }
 
@@ -51,7 +52,7 @@ export default async function PracticeBankPage({
     notFound();
   }
 
-  const questions = await prisma.question.findMany({
+  const questions = (await prisma.question.findMany({
     where: {
       bankId,
 
@@ -116,10 +117,22 @@ export default async function PracticeBankPage({
           }
         : {}),
     },
-    include: {
-      options: true,
+    select: {
+      id: true,
+      prompt: true,
+      explanation: true,
+      topic: true,
+      subtopic: true,
+      difficulty: true,
+      options: {
+        select: {
+          id: true,
+          text: true,
+          isCorrect: true,
+        },
+      },
     },
-  });
+  })) as PracticeQuestion[];
 
   if (questions.length === 0) {
     return (
@@ -141,7 +154,10 @@ export default async function PracticeBankPage({
     );
   }
 
-  const selectedQuestions = shuffleArray(questions).slice(0, limit);
+  const selectedQuestions: PracticeQuestion[] = shuffleArray(questions).slice(
+    0,
+    limit
+  );
 
   return (
     <main className="min-h-screen bg-slate-100 px-6 py-10 text-slate-950">

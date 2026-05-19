@@ -2,22 +2,10 @@
 
 import { useState } from "react";
 import { savePracticeAnswer } from "@/app/practice/actions";
+import type { PracticeOption, PracticeQuestion } from "@/lib/practice-question";
 
-type Option = {
-  id: string;
-  text: string;
-  isCorrect: boolean;
-};
-
-type Question = {
-  id: string;
-  prompt: string;
-  explanation: string;
-  topic: string;
-  subtopic: string | null;
-  difficulty: string;
-  options: Option[];
-};
+type Option = PracticeOption;
+type Question = PracticeQuestion;
 
 type PracticeSessionProps = {
   bankId: string;
