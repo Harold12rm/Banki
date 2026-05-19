@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Profile {
+  id        String   @id
+  email     String   @unique
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}
+
+model QuestionBank {
+  id        String   @id @default(cuid())
+  name      String
+  subject   String?
+  createdAt DateTime @default(now())
+
+  questions Question[]
+}
+
+model Question {
+  id          String   @id @default(cuid())
+  prompt      String
+  explanation String
+  topic       String
+  subtopic    String?
+  difficulty  String   @default("medium")
+  createdAt   DateTime @default(now())
+
+  bankId String
+  bank   QuestionBank @relation(fields: [bankId], references: [id])
+
+  options  AnswerOption[]
+  answers  SessionAnswer[]
+  markedBy MarkedQuestion[]
+  progress QuestionProgress[]
+}
+
+model AnswerOption {
+  id        String  @id @default(cuid())
+  text      String
+  isCorrect Boolean @default(false)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+}
+
+model PracticeSession {
+  id        String    @id @default(cuid())
+  userId    String
+  bankId    String
+  mode      String    @default("practice")
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+
+  answers SessionAnswer[]
+}
+
+model SessionAnswer {
+  id               String   @id @default(cuid())
+  questionId       String
+  selectedOptionId String
+  isCorrect        Boolean
+  answeredAt       DateTime @default(now())
+
+  sessionId String
+  session   PracticeSession @relation(fields: [sessionId], references: [id])
+
+  question Question @relation(fields: [questionId], references: [id])
+}
+
+model MarkedQuestion {
+  id         String   @id @default(cuid())
+  userId     String
+  questionId String
+  createdAt  DateTime @default(now())
+
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@unique([userId, questionId])
+}
+
+model QuestionProgress {
+  id         String @id @default(cuid())
+  userId     String
+  questionId String
+
+  correctCount  Int @default(0)
+  wrongCount    Int @default(0)
+  correctStreak Int @default(0)
+  wrongStreak   Int @default(0)
+
+  repetitions  Int   @default(0)
+  lapses       Int   @default(0)
+  intervalDays Float @default(0)
+  easeFactor   Float @default(2.5)
+
+  status         String    @default("new")
+  lastAnsweredAt DateTime?
+  nextReviewAt   DateTime?
+  masteredAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@unique([userId, questionId])
+  @@index([userId, status])
+  @@index([userId, nextReviewAt])
+}
