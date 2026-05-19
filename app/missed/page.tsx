@@ -45,7 +45,7 @@ export default async function MissedPage() {
   });
 
   const uniqueQuestions: MissedQuestion[] = Array.from(
-    new Map(
+    new Map<string, MissedQuestion>(
       missedAnswers.map((answer: { question: MissedQuestion }) => [answer.question.id, answer.question])
     ).values()
   );
