@@ -1,18 +1,28 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
+function getInitialIsDark() {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  const savedTheme = window.localStorage.getItem("banki-theme");
+
+  if (savedTheme) {
+    const isDark = savedTheme === "dark";
+    document.documentElement.classList.toggle("dark", isDark);
+    return isDark;
+  }
+
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.classList.toggle("dark", prefersDark);
+
+  return prefersDark;
+}
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const savedTheme = window.localStorage.getItem("banki-theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const shouldUseDark = savedTheme ? savedTheme === "dark" : prefersDark;
-
-    setIsDark(shouldUseDark);
-    document.documentElement.classList.toggle("dark", shouldUseDark);
-  }, []);
+  const [isDark, setIsDark] = useState(getInitialIsDark);
 
   function toggleTheme() {
     const nextValue = !isDark;

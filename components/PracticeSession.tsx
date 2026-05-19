@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { savePracticeAnswer } from "@/app/practice/actions";
 
 type Option = {
@@ -30,9 +30,7 @@ export default function PracticeSession({
   bankName,
   questions,
 }: PracticeSessionProps) {
-  const shuffledQuestions = useMemo(() => {
-    return [...questions].sort(() => Math.random() - 0.5);
-  }, [questions]);
+  const [shuffledQuestions] = useState(() => questions);
 
   const [index, setIndex] = useState(0);
   const [selectedId, setSelectedId] = useState("");
