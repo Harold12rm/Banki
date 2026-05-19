@@ -32,37 +32,37 @@ export default async function PracticePage() {
       <section className="mx-auto max-w-6xl space-y-8">
         <header className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
           <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            PrÃ¡ctica
+            Práctica
           </p>
 
           <h1 className="mt-1 text-4xl font-bold tracking-tight text-slate-950">
-            Elige cÃ³mo quieres practicar
+            Elige cómo quieres practicar
           </h1>
 
           <p className="mt-3 max-w-3xl text-base leading-7 text-slate-700">
-            Banki estÃ¡ diseÃ±ado para sesiones cortas y constantes. Puedes hacer
-            10 preguntas rÃ¡pidas, 20 preguntas normales o un simulacro de 50
-            preguntas cuando tengas mÃ¡s tiempo.
+            Banki está diseñado para sesiones cortas y constantes. Puedes hacer
+            10 preguntas rápidas, 20 preguntas normales o un simulacro de 50
+            preguntas cuando tengas más tiempo.
           </p>
         </header>
 
         <section className="grid gap-4 md:grid-cols-3">
           <InfoCard
             title="10 preguntas"
-            subtitle="PrÃ¡ctica rÃ¡pida"
-            description="Ideal para repasar durante el dÃ­a sin cansarte. Ãšsalo cuando tengas poco tiempo."
+            subtitle="Práctica rápida"
+            description="Ideal para repasar durante el día sin cansarte. Úsalo cuando tengas poco tiempo."
           />
 
           <InfoCard
             title="20 preguntas"
-            subtitle="PrÃ¡ctica normal"
-            description="Buena sesiÃ³n para reforzar un tema, banco o curso con mÃ¡s profundidad."
+            subtitle="Práctica normal"
+            description="Buena sesión para reforzar un tema, banco o curso con más profundidad."
           />
 
           <InfoCard
             title="50 preguntas"
             subtitle="Simulacro"
-            description="Modo largo para entrenar resistencia, concentraciÃ³n y manejo de tiempo."
+            description="Modo largo para entrenar resistencia, concentración y manejo de tiempo."
           />
         </section>
 
@@ -72,7 +72,7 @@ export default async function PracticePage() {
           </h2>
 
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            Estos modos usan tu historial para priorizar lo que mÃ¡s necesitas
+            Estos modos usan tu historial para priorizar lo que más necesitas
             repasar.
           </p>
 
@@ -89,12 +89,12 @@ export default async function PracticePage() {
 
             <ModeInfoCard
               title="Pendientes"
-              description="Preguntas cuyo repaso ya toca segÃºn repeticiÃ³n espaciada."
+              description="Preguntas cuyo repaso ya toca según repetición espaciada."
             />
 
             <ModeInfoCard
               title="No dominadas"
-              description="Preguntas nuevas, dÃ©biles o en aprendizaje."
+              description="Preguntas nuevas, débiles o en aprendizaje."
             />
           </div>
         </section>
@@ -143,7 +143,7 @@ export default async function PracticePage() {
                     </h2>
 
                     <p className="mt-1 text-sm text-slate-600">
-                      {bank.subject || "Sin categorÃ­a"} Â·{" "}
+                      {bank.subject || "Sin categoría"} ·{" "}
                       {bank._count.questions}{" "}
                       {bank._count.questions === 1 ? "pregunta" : "preguntas"}
                     </p>
@@ -165,13 +165,13 @@ export default async function PracticePage() {
                   <div className="mt-3 grid gap-3 md:grid-cols-3">
                     <PracticeButton
                       href={`/practice/${bank.id}/start?limit=10`}
-                      title="PrÃ¡ctica rÃ¡pida"
+                      title="Práctica rápida"
                       description="10 preguntas"
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?limit=20`}
-                      title="PrÃ¡ctica normal"
+                      title="Práctica normal"
                       description="20 preguntas"
                     />
 
@@ -210,7 +210,7 @@ export default async function PracticePage() {
                     <PracticeButton
                       href={`/practice/${bank.id}/start?mode=not-mastered&limit=10`}
                       title="No dominadas"
-                      description="AÃºn en aprendizaje"
+                      description="Aún en aprendizaje"
                     />
                   </div>
                 </div>

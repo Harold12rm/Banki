@@ -9,7 +9,7 @@ async function login(formData: FormData) {
   const password = String(formData.get("password") || "");
 
   if (!email || !password) {
-    redirect("/login?error=Correo%20y%20contraseÃ±a%20son%20obligatorios.");
+    redirect("/login?error=Correo%20y%20contraseña%20son%20obligatorios.");
   }
 
   const supabase = await createSupabaseServerClient();
@@ -50,11 +50,11 @@ export default async function LoginPage({
           </p>
 
           <h1 className="mt-1 text-4xl font-bold tracking-tight text-slate-950">
-            Iniciar sesiÃ³n
+            Iniciar sesión
           </h1>
 
           <p className="mt-2 text-slate-700">
-            Accede para guardar tu progreso, estadÃ­sticas y repeticiÃ³n espaciada.
+            Accede para guardar tu progreso, estadísticas y repetición espaciada.
           </p>
         </header>
 
@@ -90,14 +90,14 @@ export default async function LoginPage({
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-800">
-              ContraseÃ±a
+              Contraseña
             </label>
 
             <input
               name="password"
               type="password"
               required
-              placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+              placeholder="••••••••"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-slate-950"
             />
           </div>
@@ -107,7 +107,7 @@ export default async function LoginPage({
           </button>
 
           <p className="text-center text-sm text-slate-600">
-            Â¿No tienes cuenta?{" "}
+            ¿No tienes cuenta?{" "}
             <Link href="/signup" className="font-semibold text-slate-950">
               Crear cuenta
             </Link>

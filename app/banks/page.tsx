@@ -110,7 +110,7 @@ export default async function BanksPage() {
 
             <p className="mt-2 max-w-2xl text-base text-slate-700">
               Administra tus bancos, edita preguntas y empieza sesiones cortas
-              de prÃ¡ctica.
+              de práctica.
             </p>
           </div>
 
@@ -141,7 +141,7 @@ export default async function BanksPage() {
         {banks.length === 0 ? (
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-slate-950">
-              TodavÃ­a no hay bancos creados
+              Todavía no hay bancos creados
             </h2>
 
             <p className="mt-2 text-slate-700">
@@ -178,7 +178,7 @@ export default async function BanksPage() {
                     </h2>
 
                     <p className="mt-1 text-sm text-slate-600">
-                      {bank.subject || "Sin categorÃ­a"}
+                      {bank.subject || "Sin categoría"}
                     </p>
                   </div>
 
@@ -233,7 +233,7 @@ export default async function BanksPage() {
 
 
                       <ConfirmSubmitButton
-                      message="Â¿Seguro que deseas eliminar este banco? TambiÃ©n se eliminarÃ¡n sus preguntas, respuestas, progreso y sesiones."
+                      message="¿Seguro que deseas eliminar este banco? También se eliminarán sus preguntas, respuestas, progreso y sesiones."
                       className="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100"
                     >
                       Eliminar banco
@@ -254,7 +254,7 @@ export default async function BanksPage() {
                       href={`/banks/${bank.id}/questions/new`}
                       className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                     >
-                      AÃ±adir pregunta â†’
+                      Añadir pregunta →
                     </Link>
                   )}
 
@@ -262,14 +262,14 @@ export default async function BanksPage() {
                     href={`/practice/${bank.id}/start?limit=20`}
                     className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                   >
-                    Practicar 20 â†’
+                    Practicar 20 →
                   </Link>
 
                   <Link
                     href={`/practice/${bank.id}/start?limit=50`}
                     className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                   >
-                    Simulacro 50 â†’
+                    Simulacro 50 →
                   </Link>
                 </div>
               </article>

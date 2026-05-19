@@ -74,9 +74,9 @@ function parseCorrectOption(value: string) {
 function normalizeDifficulty(value: string) {
   const clean = value.trim().toLowerCase();
 
-  if (["facil", "fÃ¡cil", "easy"].includes(clean)) return "easy";
+  if (["facil", "fácil", "easy"].includes(clean)) return "easy";
   if (["media", "medio", "medium"].includes(clean)) return "medium";
-  if (["dificil", "difÃ­cil", "hard"].includes(clean)) return "hard";
+  if (["dificil", "difícil", "hard"].includes(clean)) return "hard";
 
   return "medium";
 }

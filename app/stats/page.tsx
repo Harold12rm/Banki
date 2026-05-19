@@ -274,7 +274,7 @@ export default async function StatsPage() {
         <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-              EstadÃ­sticas
+              Estadísticas
             </p>
 
             <h1 className="mt-1 text-4xl font-bold tracking-tight text-slate-950">
@@ -282,8 +282,8 @@ export default async function StatsPage() {
             </h1>
 
             <p className="mt-2 max-w-3xl text-base text-slate-700">
-              Analiza tu progreso, detecta temas dÃ©biles y decide quÃ© practicar
-              despuÃ©s.
+              Analiza tu progreso, detecta temas débiles y decide qué practicar
+              después.
             </p>
           </div>
 
@@ -303,19 +303,19 @@ export default async function StatsPage() {
         </section>
 
         <section className="grid gap-4 sm:grid-cols-4">
-          <StatCard title="Racha diaria" value={`${streak} dÃ­as`} />
+          <StatCard title="Racha diaria" value={`${streak} días`} />
           <StatCard title="Pendientes hoy" value={String(dueQuestions.length)} />
-          <StatCard title="DÃ©biles" value={String(weakQuestions.length)} />
+          <StatCard title="Débiles" value={String(weakQuestions.length)} />
           <StatCard title="Dominadas" value={String(masteredQuestions.length)} />
         </section>
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold text-slate-950">
-            Actividad de los Ãºltimos 7 dÃ­as
+            Actividad de los últimos 7 días
           </h2>
 
           <p className="mt-1 text-sm text-slate-600">
-            Muestra cuÃ¡ntas preguntas respondiste cada dÃ­a.
+            Muestra cuántas preguntas respondiste cada día.
           </p>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-7">
@@ -333,7 +333,7 @@ export default async function StatsPage() {
                 </p>
 
                 <p className="mt-1 text-xs text-slate-600">
-                  {day.correct} correctas Â· {day.wrong} falladas
+                  {day.correct} correctas · {day.wrong} falladas
                 </p>
               </div>
             ))}
@@ -378,8 +378,8 @@ export default async function StatsPage() {
           </h2>
 
           <p className="mt-1 text-sm text-slate-600">
-            Te ayuda a saber si estÃ¡s fallando mÃ¡s en preguntas fÃ¡ciles, medias
-            o difÃ­ciles.
+            Te ayuda a saber si estás fallando más en preguntas fáciles, medias
+            o difíciles.
           </p>
 
           {difficultyRows.length === 0 ? (
@@ -393,7 +393,7 @@ export default async function StatsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-bold text-slate-950">
-                Preguntas dÃ©biles
+                Preguntas débiles
               </h2>
 
               <p className="mt-1 text-sm text-slate-600">
@@ -411,7 +411,7 @@ export default async function StatsPage() {
 
           {weakQuestions.length === 0 ? (
             <p className="mt-4 text-slate-700">
-              No tienes preguntas dÃ©biles por ahora.
+              No tienes preguntas débiles por ahora.
             </p>
           ) : (
             <div className="mt-5 space-y-3">
@@ -425,8 +425,8 @@ export default async function StatsPage() {
                   </p>
 
                   <p className="mt-1 text-sm text-red-800">
-                    {item.question.bank.name} Â· {item.question.topic} Â· Fallos:{" "}
-                    {item.wrongCount} Â· Racha fallida: {item.wrongStreak}
+                    {item.question.bank.name} · {item.question.topic} · Fallos:{" "}
+                    {item.wrongCount} · Racha fallida: {item.wrongStreak}
                   </p>
                 </div>
               ))}
@@ -436,11 +436,11 @@ export default async function StatsPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold text-slate-950">
-            Ãšltimas respuestas guardadas
+            Últimas respuestas guardadas
           </h2>
 
           {answers.length === 0 ? (
-            <p className="mt-3 text-slate-700">AÃºn no hay respuestas.</p>
+            <p className="mt-3 text-slate-700">Aún no hay respuestas.</p>
           ) : (
             <div className="mt-5 space-y-3">
               {answers.slice(0, 12).map((answer) => (
@@ -453,8 +453,8 @@ export default async function StatsPage() {
                   </p>
 
                   <p className="mt-1 text-sm text-slate-700">
-                    {answer.isCorrect ? "Correcta" : "Fallada"} Â·{" "}
-                    {answer.question.bank.name} Â· {answer.question.topic} Â·{" "}
+                    {answer.isCorrect ? "Correcta" : "Fallada"} ·{" "}
+                    {answer.question.bank.name} · {answer.question.topic} ·{" "}
                     {answer.answeredAt.toLocaleString("es-PE")}
                   </p>
                 </div>
@@ -522,15 +522,15 @@ function StatsTable({
 function EmptyText() {
   return (
     <p className="mt-3 text-slate-700">
-      TodavÃ­a no hay respuestas guardadas.
+      Todavía no hay respuestas guardadas.
     </p>
   );
 }
 
 function translateDifficulty(difficulty: string) {
-  if (difficulty === "easy") return "FÃ¡cil";
+  if (difficulty === "easy") return "Fácil";
   if (difficulty === "medium") return "Media";
-  if (difficulty === "hard") return "DifÃ­cil";
+  if (difficulty === "hard") return "Difícil";
 
   return difficulty;
 }

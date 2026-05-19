@@ -206,11 +206,11 @@ export default async function ReviewSessionPage({
           </p>
 
           <h1 className="mt-1 text-2xl font-bold text-slate-950">
-            {getModeLabel(mode)} Â· {questions.length} preguntas
+            {getModeLabel(mode)} · {questions.length} preguntas
           </h1>
 
           <p className="mt-2 text-sm text-slate-700">
-            Esta sesiÃ³n fue generada segÃºn tu progreso y filtros seleccionados.
+            Esta sesión fue generada según tu progreso y filtros seleccionados.
           </p>
         </div>
 

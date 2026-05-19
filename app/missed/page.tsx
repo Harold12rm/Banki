@@ -68,7 +68,7 @@ export default async function MissedPage() {
 
           <p className="mt-2 max-w-2xl text-base text-slate-700">
             Revisa las preguntas que respondiste incorrectamente para reforzar
-            tus temas dÃ©biles.
+            tus temas débiles.
           </p>
         </header>
 
@@ -79,7 +79,7 @@ export default async function MissedPage() {
             </h2>
 
             <p className="mt-2 text-slate-700">
-              Cuando falles una pregunta en prÃ¡ctica, aparecerÃ¡ aquÃ­ para que
+              Cuando falles una pregunta en práctica, aparecerá aquí para que
               puedas repasarla.
             </p>
           </div>
@@ -99,7 +99,7 @@ export default async function MissedPage() {
                     <div>
                       <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                         {question.topic}
-                        {question.subtopic ? ` Â· ${question.subtopic}` : ""}
+                        {question.subtopic ? ` · ${question.subtopic}` : ""}
                       </p>
 
                       <h2 className="mt-2 text-xl font-bold text-slate-950">
@@ -124,7 +124,7 @@ export default async function MissedPage() {
 
                   <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
                     <p className="text-sm font-semibold text-slate-800">
-                      ExplicaciÃ³n
+                      Explicación
                     </p>
 
                     <p className="mt-1 text-sm leading-6 text-slate-700">

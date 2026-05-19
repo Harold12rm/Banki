@@ -11,7 +11,7 @@ export default async function HomePage() {
           <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-                Aprende con repeticiÃ³n espaciada
+                Aprende con repetición espaciada
               </p>
 
               <h1 className="mt-3 text-5xl font-black tracking-tight text-slate-950 md:text-6xl">
@@ -19,7 +19,7 @@ export default async function HomePage() {
               </h1>
 
               <p className="mt-5 max-w-2xl text-lg leading-8 text-slate-700">
-                Practica sesiones cortas, detecta tus preguntas dÃ©biles, repasa
+                Practica sesiones cortas, detecta tus preguntas débiles, repasa
                 cuando toca y mide tu progreso por banco, tema y dificultad.
               </p>
 
@@ -35,7 +35,7 @@ export default async function HomePage() {
                   href={user ? "/practice" : "/login"}
                   className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-6 py-3 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-white"
                 >
-                  {user ? "Practicar ahora" : "Iniciar sesiÃ³n"}
+                  {user ? "Practicar ahora" : "Iniciar sesión"}
                 </Link>
               </div>
             </div>
@@ -48,12 +48,12 @@ export default async function HomePage() {
                 />
 
                 <FeatureCard
-                  title="RepeticiÃ³n espaciada"
+                  title="Repetición espaciada"
                   description="Banki prioriza pendientes, zona roja y no dominadas."
                 />
 
                 <FeatureCard
-                  title="EstadÃ­sticas Ãºtiles"
+                  title="Estadísticas útiles"
                   description="Mide rendimiento por banco, tema, dificultad y actividad."
                 />
               </div>
