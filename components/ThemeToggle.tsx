@@ -1,35 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
-function getInitialIsDark() {
-  if (typeof window === "undefined") {
-    return false;
-  }
+const themeChangeEvent = "banki-theme-change";
 
+function getPreferredIsDark() {
   const savedTheme = window.localStorage.getItem("banki-theme");
 
   if (savedTheme) {
-    const isDark = savedTheme === "dark";
-    document.documentElement.classList.toggle("dark", isDark);
-    return isDark;
+    return savedTheme === "dark";
   }
 
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  document.documentElement.classList.toggle("dark", prefersDark);
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
 
-  return prefersDark;
+function getServerSnapshot() {
+  return false;
+}
+
+function subscribeToThemeChange(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(themeChangeEvent, callback);
+
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(themeChangeEvent, callback);
+  };
 }
 
 export default function ThemeToggle() {
-  const [isDark, setIsDark] = useState(getInitialIsDark);
+  const isDark = useSyncExternalStore(
+    subscribeToThemeChange,
+    getPreferredIsDark,
+    getServerSnapshot
+  );
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", isDark);
+  }, [isDark]);
 
   function toggleTheme() {
     const nextValue = !isDark;
 
-    setIsDark(nextValue);
     document.documentElement.classList.toggle("dark", nextValue);
     window.localStorage.setItem("banki-theme", nextValue ? "dark" : "light");
+    window.dispatchEvent(new Event(themeChangeEvent));
   }
 
   return (
