@@ -192,9 +192,16 @@ export async function importQuestions(
       }
     }
 
+    if (!bank) {
+      skippedRows += 1;
+      continue;
+    }
+
+    const bankId = bank.id;
+
     const existingQuestion = await prisma.question.findFirst({
       where: {
-        bankId: bank.id,
+        bankId,
         prompt,
       },
       select: {
@@ -209,7 +216,7 @@ export async function importQuestions(
 
     await prisma.question.create({
       data: {
-        bankId: bank.id,
+        bankId,
         prompt,
         explanation,
         topic,
