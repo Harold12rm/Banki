@@ -4,10 +4,38 @@ import { prisma } from "@/lib/prisma";
 import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
 import { getCurrentProfile } from "@/lib/auth";
 
+type BankRecord = {
+  id: string;
+  name: string;
+  subject: string | null;
+};
+
+type QuestionSummary = {
+  id: string;
+  topic: string;
+  difficulty: string;
+};
+
+type QuestionOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+};
+
+type QuestionListItem = {
+  id: string;
+  prompt: string;
+  explanation: string;
+  topic: string;
+  subtopic: string | null;
+  difficulty: string;
+  options: QuestionOption[];
+};
+
 async function deleteBank(bankId: string) {
   "use server";
 
-  const questions = await prisma.question.findMany({
+  const questions: { id: string }[] = await prisma.question.findMany({
     where: {
       bankId,
     },
@@ -16,7 +44,7 @@ async function deleteBank(bankId: string) {
     },
   });
 
-  const questionIds = questions.map((question: { id: string }) => question.id);
+  const questionIds = questions.map((question) => question.id);
 
   await prisma.sessionAnswer.deleteMany({
     where: {
@@ -89,17 +117,17 @@ export default async function BankDetailPage({
   const topic = filters.topic || "";
   const difficulty = filters.difficulty || "";
 
-  const bank = await prisma.questionBank.findUnique({
+  const bank = (await prisma.questionBank.findUnique({
     where: {
       id: bankId,
     },
-  });
+  })) as BankRecord | null;
 
   if (!bank) {
     notFound();
   }
 
-  const allQuestions = await prisma.question.findMany({
+  const allQuestions: QuestionSummary[] = await prisma.question.findMany({
     where: {
       bankId,
     },
@@ -110,7 +138,7 @@ export default async function BankDetailPage({
     },
   });
 
-  const questions = await prisma.question.findMany({
+  const questions: QuestionListItem[] = await prisma.question.findMany({
     where: {
       bankId,
 
@@ -159,21 +187,21 @@ export default async function BankDetailPage({
   const topics: string[] = Array.from(
     new Set<string>(
       allQuestions
-        .map((question: { topic: string | null }) => question.topic)
-        .filter((topic: string | null): topic is string => Boolean(topic))
+        .map((question) => question.topic)
+        .filter((topic): topic is string => Boolean(topic))
     )
   ).sort();
 
   const easyCount = allQuestions.filter(
-    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "easy"
+    (question) => question.difficulty === "easy"
   ).length;
 
   const mediumCount = allQuestions.filter(
-    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "medium"
+    (question) => question.difficulty === "medium"
   ).length;
 
   const hardCount = allQuestions.filter(
-    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "hard"
+    (question) => question.difficulty === "hard"
   ).length;
 
   const profile = await getCurrentProfile();
@@ -379,7 +407,7 @@ export default async function BankDetailPage({
           </div>
         ) : (
           <div className="space-y-4">
-            {questions.map((question: { id: string; prompt: string; topic: string; subtopic: string | null; difficulty: string; explanation: string; options: { id: string; text: string; isCorrect: boolean }[] }, index: number) => {
+            {questions.map((question, index) => {
               const correctOption = question.options.find(
                 (option) => option.isCorrect
               );
@@ -431,7 +459,7 @@ export default async function BankDetailPage({
                   </div>
 
                   <div className="mt-5 grid gap-3">
-                    {question.options.map((option: { id: string; text: string; isCorrect: boolean }) => (
+                    {question.options.map((option) => (
                       <div
                         key={option.id}
                         className={

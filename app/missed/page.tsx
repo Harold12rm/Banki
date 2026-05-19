@@ -16,6 +16,10 @@ type MissedQuestion = {
   }[];
 };
 
+type MissedAnswer = {
+  question: MissedQuestion;
+};
+
 export default async function MissedPage() {
   const user = await getCurrentUser();
 
@@ -25,7 +29,7 @@ export default async function MissedPage() {
 
   const userId = user.id;
 
-  const missedAnswers = await prisma.sessionAnswer.findMany({
+  const missedAnswers: MissedAnswer[] = await prisma.sessionAnswer.findMany({
     where: {
       isCorrect: false,
       session: {
@@ -46,7 +50,7 @@ export default async function MissedPage() {
 
   const uniqueQuestions: MissedQuestion[] = Array.from(
     new Map<string, MissedQuestion>(
-      missedAnswers.map((answer: { question: MissedQuestion }) => [answer.question.id, answer.question])
+      missedAnswers.map((answer) => [answer.question.id, answer.question])
     ).values()
   );
 
@@ -81,9 +85,9 @@ export default async function MissedPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            {uniqueQuestions.map((question: MissedQuestion) => {
+            {uniqueQuestions.map((question) => {
               const correctOption = question.options.find(
-                (option: { id: string; text: string; isCorrect: boolean }) => option.isCorrect
+                (option) => option.isCorrect
               );
 
               return (

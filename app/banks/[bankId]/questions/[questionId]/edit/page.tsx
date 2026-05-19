@@ -3,6 +3,24 @@ import { prisma } from "@/lib/prisma";
 import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
 import { requireAdmin } from "@/lib/auth";
 
+type EditOption = {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+  questionId: string;
+};
+
+type EditQuestion = {
+  id: string;
+  bankId: string;
+  prompt: string;
+  explanation: string;
+  topic: string;
+  subtopic: string | null;
+  difficulty: string;
+  options: EditOption[];
+};
+
 async function updateQuestion(
   bankId: string,
   questionId: string,
@@ -110,14 +128,14 @@ export default async function EditQuestionPage({
 
   const { bankId, questionId } = await params;
 
-  const question = await prisma.question.findUnique({
+  const question = (await prisma.question.findUnique({
     where: {
       id: questionId,
     },
     include: {
       options: true,
     },
-  });
+  })) as EditQuestion | null;
 
   if (!question || question.bankId !== bankId) {
     notFound();

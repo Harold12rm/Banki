@@ -18,12 +18,12 @@ type BankListItem = {
 async function deleteBank(bankId: string) {
   "use server";
 
-  const questions = await prisma.question.findMany({
+  const questions: { id: string }[] = await prisma.question.findMany({
     where: { bankId },
     select: { id: true },
   });
 
-  const questionIds = questions.map((question: { id: string }) => question.id);
+  const questionIds = questions.map((question) => question.id);
 
   await prisma.sessionAnswer.deleteMany({
     where: {

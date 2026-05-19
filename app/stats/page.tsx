@@ -6,6 +6,49 @@ export const revalidate = 0;
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+type StatsAnswer = {
+  id: string;
+  isCorrect: boolean;
+  answeredAt: Date;
+  question: {
+    prompt: string;
+    topic: string;
+    difficulty: string;
+    bank: {
+      name: string;
+    };
+  };
+};
+
+type StatsProgressItem = {
+  id: string;
+  status: string;
+  wrongCount: number;
+  wrongStreak: number;
+  nextReviewAt: Date | null;
+  question: {
+    prompt: string;
+    topic: string;
+    bank: {
+      name: string;
+    };
+  };
+};
+
+type ActivityDay = {
+  date: Date;
+  key: string;
+  label: string;
+};
+
+type StatsRow = {
+  label: string;
+  total: number;
+  correct: number;
+  wrong: number;
+  percent: number;
+};
+
 function startOfDay(date: Date) {
   const copy = new Date(date);
   copy.setHours(0, 0, 0, 0);
@@ -16,7 +59,7 @@ function formatDateKey(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-function getLastSevenDays() {
+function getLastSevenDays(): ActivityDay[] {
   const today = startOfDay(new Date());
 
   return Array.from({ length: 7 }).map((_, index) => {
@@ -59,7 +102,7 @@ export default async function StatsPage() {
 
   const userId = user.id;
 
-  const answers = await prisma.sessionAnswer.findMany({
+  const answers: StatsAnswer[] = await prisma.sessionAnswer.findMany({
     where: {
       session: {
         userId,
@@ -78,7 +121,7 @@ export default async function StatsPage() {
     },
   });
 
-  const progress = await prisma.questionProgress.findMany({
+  const progress: StatsProgressItem[] = await prisma.questionProgress.findMany({
     where: {
       userId,
     },
@@ -95,7 +138,7 @@ export default async function StatsPage() {
   });
 
   const total = answers.length;
-  const correct = answers.filter((answer: { isCorrect: boolean }) => answer.isCorrect).length;
+  const correct = answers.filter((answer) => answer.isCorrect).length;
   const wrong = total - correct;
   const percent = total > 0 ? Math.round((correct / total) * 100) : 0;
 
@@ -112,17 +155,17 @@ export default async function StatsPage() {
   );
 
   const streak = calculateDailyStreak(
-    answers.map((answer: { answeredAt: Date }) => answer.answeredAt)
+    answers.map((answer) => answer.answeredAt)
   );
 
   const lastSevenDays = getLastSevenDays();
 
-  const activityRows = lastSevenDays.map((day: { date: Date; key: string; label: string }) => {
+  const activityRows = lastSevenDays.map((day) => {
     const dayAnswers = answers.filter(
       (answer) => formatDateKey(startOfDay(answer.answeredAt)) === day.key
     );
 
-    const dayCorrect = dayAnswers.filter((answer: { isCorrect: boolean }) => answer.isCorrect).length;
+    const dayCorrect = dayAnswers.filter((answer) => answer.isCorrect).length;
 
     return {
       label: day.label,
@@ -276,7 +319,7 @@ export default async function StatsPage() {
           </p>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-7">
-            {activityRows.map((day: { label: string; total: number; correct: number; wrong: number }) => (
+            {activityRows.map((day) => (
               <div
                 key={day.label}
                 className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
@@ -372,7 +415,7 @@ export default async function StatsPage() {
             </p>
           ) : (
             <div className="mt-5 space-y-3">
-              {weakQuestions.slice(0, 8).map((item: { id: string; question: { prompt: string; bank: { name: string }; topic: string }; wrongCount: number; wrongStreak: number }) => (
+              {weakQuestions.slice(0, 8).map((item) => (
                 <div
                   key={item.id}
                   className="rounded-2xl border border-red-100 bg-red-50 p-4"
@@ -400,7 +443,7 @@ export default async function StatsPage() {
             <p className="mt-3 text-slate-700">AÃºn no hay respuestas.</p>
           ) : (
             <div className="mt-5 space-y-3">
-              {answers.slice(0, 12).map((answer: { id: string; isCorrect: boolean; answeredAt: Date; question: { prompt: string; bank: { name: string }; topic: string } }) => (
+              {answers.slice(0, 12).map((answer) => (
                 <div
                   key={answer.id}
                   className="rounded-2xl border border-slate-200 bg-slate-50 p-4"
@@ -437,13 +480,7 @@ function StatsTable({
   rows,
   firstColumnTitle,
 }: {
-  rows: {
-    label: string;
-    total: number;
-    correct: number;
-    wrong: number;
-    percent: number;
-  }[];
+  rows: StatsRow[];
   firstColumnTitle: string;
 }) {
   return (
@@ -460,7 +497,7 @@ function StatsTable({
         </thead>
 
         <tbody>
-          {rows.map((row: { label: string; total: number; correct: number; wrong: number; percent: number }) => (
+          {rows.map((row) => (
             <tr
               key={row.label}
               className="border-b border-slate-100 last:border-b-0"

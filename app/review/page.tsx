@@ -6,6 +6,20 @@ export const revalidate = 0;
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
+type ReviewProgressItem = {
+  status: string;
+  nextReviewAt: Date | null;
+  question: {
+    topic: string;
+  };
+};
+
+type ReviewBankOption = {
+  id: string;
+  name: string;
+  subject: string | null;
+};
+
 export default async function ReviewPage() {
   const user = await getCurrentUser();
 
@@ -16,7 +30,7 @@ export default async function ReviewPage() {
   const userId = user.id;
   const now = new Date();
 
-  const progress = await prisma.questionProgress.findMany({
+  const progress: ReviewProgressItem[] = await prisma.questionProgress.findMany({
     where: {
       userId,
     },
@@ -32,7 +46,7 @@ export default async function ReviewPage() {
     },
   });
 
-  const banks = await prisma.questionBank.findMany({
+  const banks: ReviewBankOption[] = await prisma.questionBank.findMany({
     orderBy: {
       name: "asc",
     },
@@ -44,7 +58,11 @@ export default async function ReviewPage() {
   });
 
   const topics = Array.from(
-    new Set<string>(progress.map((item: { question: { topic: string } }) => item.question.topic).filter((topic: string): topic is string => Boolean(topic)))
+    new Set<string>(
+      progress
+        .map((item) => item.question.topic)
+        .filter((topic): topic is string => Boolean(topic))
+    )
   ).sort();
 
   const dueCount = progress.filter(
@@ -175,7 +193,7 @@ export default async function ReviewPage() {
             >
               <option value="">Todos los bancos</option>
 
-              {banks.map((bank: { id: string; name: string; subject: string | null }) => (
+              {banks.map((bank) => (
                 <option key={bank.id} value={bank.id}>
                   {bank.name}
                   {bank.subject ? ` Â· ${bank.subject}` : ""}

@@ -2,10 +2,16 @@
 import { requireAdmin } from "@/lib/auth";
 import ImportQuestionsForm from "@/components/ImportQuestionsForm";
 
+type BankOption = {
+  id: string;
+  name: string;
+  subject: string | null;
+};
+
 export default async function ImportPage() {
   await requireAdmin();
 
-  const banks = await prisma.questionBank.findMany({
+  const banks: BankOption[] = await prisma.questionBank.findMany({
     orderBy: {
       createdAt: "desc",
     },

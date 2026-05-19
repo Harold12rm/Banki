@@ -4,8 +4,17 @@ import { prisma } from "@/lib/prisma";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+type PracticeBank = {
+  id: string;
+  name: string;
+  subject: string | null;
+  _count: {
+    questions: number;
+  };
+};
+
 export default async function PracticePage() {
-  const banks = await prisma.questionBank.findMany({
+  const banks: PracticeBank[] = await prisma.questionBank.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -118,7 +127,7 @@ export default async function PracticePage() {
           </section>
         ) : (
           <section className="space-y-5">
-            {banks.map((bank: { id: string; name: string; subject: string | null; _count: { questions: number } }) => (
+            {banks.map((bank) => (
               <article
                 key={bank.id}
                 className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
