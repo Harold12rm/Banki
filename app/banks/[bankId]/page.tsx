@@ -161,15 +161,15 @@ export default async function BankDetailPage({
   ).sort();
 
   const easyCount = allQuestions.filter(
-    (question) => question.difficulty === "easy"
+    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "easy"
   ).length;
 
   const mediumCount = allQuestions.filter(
-    (question) => question.difficulty === "medium"
+    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "medium"
   ).length;
 
   const hardCount = allQuestions.filter(
-    (question) => question.difficulty === "hard"
+    (question: { id: string; topic: string; difficulty: string }) => question.difficulty === "hard"
   ).length;
 
   const profile = await getCurrentProfile();
