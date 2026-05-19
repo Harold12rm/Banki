@@ -1,3 +1,4 @@
+﻿import { cache } from "react";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -12,49 +13,43 @@ export async function requireUser() {
   return user;
 }
 
-export async function getCurrentProfile() {
+export const getCurrentProfile = cache(async () => {
   const user = await getCurrentUser();
 
   if (!user) {
     return null;
   }
 
-  const profile = await prisma.profile.upsert({
+  const profile = await prisma.profile.findUnique({
     where: {
       id: user.id,
-    },
-    update: {
-      email: user.email || "",
-    },
-    create: {
-      id: user.id,
-      email: user.email || "",
-      role: "user",
     },
   });
 
   return profile;
-}
+});
 
 export async function requireAdmin() {
   const user = await requireUser();
 
-  const profile = await prisma.profile.upsert({
+  let profile = await prisma.profile.findUnique({
     where: {
       id: user.id,
     },
-    update: {
-      email: user.email || "",
-    },
-    create: {
-      id: user.id,
-      email: user.email || "",
-      role: "user",
-    },
   });
 
+  if (!profile) {
+    profile = await prisma.profile.create({
+      data: {
+        id: user.id,
+        email: user.email || "",
+        role: "user",
+      },
+    });
+  }
+
   if (profile.role !== "admin") {
-    redirect("/practice");
+    redirect("/unauthorized");
   }
 
   return profile;
