@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/supabase/server";
@@ -161,7 +161,7 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
   const user = await getCurrentUser();
 
   if (!user) {
-    throw new Error("Debes iniciar sesi�n para guardar tu progreso.");
+    throw new Error("Debes iniciar sesiï¿½n para guardar tu progreso.");
   }
 
   const userId = user.id;

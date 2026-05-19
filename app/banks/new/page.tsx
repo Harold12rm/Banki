@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 
@@ -40,7 +40,7 @@ export default async function NewBankPage() {
           </h1>
 
           <p className="mt-2 text-slate-700">
-            Crea una colección para organizar preguntas por curso, tema o
+            Crea una colecciÃ³n para organizar preguntas por curso, tema o
             examen.
           </p>
         </header>
@@ -64,12 +64,12 @@ export default async function NewBankPage() {
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-800">
-              Curso o categoría
+              Curso o categorÃ­a
             </label>
 
             <input
               name="subject"
-              placeholder="Ejemplo: Salud Pública"
+              placeholder="Ejemplo: Salud PÃºblica"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-slate-950"
             />
           </div>

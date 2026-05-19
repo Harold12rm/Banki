@@ -16,7 +16,7 @@ async function deleteBank(bankId: string) {
     },
   });
 
-  const questionIds = questions.map((question) => question.id);
+  const questionIds = questions.map((question: { id: string }) => question.id);
 
   await prisma.sessionAnswer.deleteMany({
     where: {

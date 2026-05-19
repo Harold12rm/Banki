@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
@@ -12,7 +12,7 @@ async function deleteBank(bankId: string) {
     select: { id: true },
   });
 
-  const questionIds = questions.map((question) => question.id);
+  const questionIds = questions.map((question: { id: string }) => question.id);
 
   await prisma.sessionAnswer.deleteMany({
     where: {
@@ -99,7 +99,7 @@ export default async function BanksPage() {
 
             <p className="mt-2 max-w-2xl text-base text-slate-700">
               Administra tus bancos, edita preguntas y empieza sesiones cortas
-              de práctica.
+              de prÃ¡ctica.
             </p>
           </div>
 
@@ -130,7 +130,7 @@ export default async function BanksPage() {
         {banks.length === 0 ? (
           <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-slate-950">
-              Todavía no hay bancos creados
+              TodavÃ­a no hay bancos creados
             </h2>
 
             <p className="mt-2 text-slate-700">
@@ -167,7 +167,7 @@ export default async function BanksPage() {
                     </h2>
 
                     <p className="mt-1 text-sm text-slate-600">
-                      {bank.subject || "Sin categoría"}
+                      {bank.subject || "Sin categorÃ­a"}
                     </p>
                   </div>
 
@@ -222,7 +222,7 @@ export default async function BanksPage() {
 
 
                       <ConfirmSubmitButton
-                      message="¿Seguro que deseas eliminar este banco? También se eliminarán sus preguntas, respuestas, progreso y sesiones."
+                      message="Â¿Seguro que deseas eliminar este banco? TambiÃ©n se eliminarÃ¡n sus preguntas, respuestas, progreso y sesiones."
                       className="w-full rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100"
                     >
                       Eliminar banco
@@ -243,7 +243,7 @@ export default async function BanksPage() {
                       href={`/banks/${bank.id}/questions/new`}
                       className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                     >
-                      Añadir pregunta →
+                      AÃ±adir pregunta â†’
                     </Link>
                   )}
 
@@ -251,14 +251,14 @@ export default async function BanksPage() {
                     href={`/practice/${bank.id}/start?limit=20`}
                     className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                   >
-                    Practicar 20 →
+                    Practicar 20 â†’
                   </Link>
 
                   <Link
                     href={`/practice/${bank.id}/start?limit=50`}
                     className="text-sm font-semibold text-slate-700 hover:text-slate-950"
                   >
-                    Simulacro 50 →
+                    Simulacro 50 â†’
                   </Link>
                 </div>
               </article>
@@ -269,3 +269,4 @@ export default async function BanksPage() {
     </main>
   );
 }
+

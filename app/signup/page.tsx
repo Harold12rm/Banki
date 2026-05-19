@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -10,7 +10,7 @@ async function signup(formData: FormData) {
   const password = String(formData.get("password") || "");
 
   if (!email || !password) {
-    redirect("/signup?error=Correo%20y%20contraseña%20son%20obligatorios.");
+    redirect("/signup?error=Correo%20y%20contraseÃ±a%20son%20obligatorios.");
   }
 
   const supabase = await createSupabaseServerClient();
@@ -94,7 +94,7 @@ export default async function SignupPage({
 
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-800">
-              Contraseña
+              ContraseÃ±a
             </label>
 
             <input
@@ -102,7 +102,7 @@ export default async function SignupPage({
               type="password"
               required
               minLength={6}
-              placeholder="mínimo 6 caracteres"
+              placeholder="mÃ­nimo 6 caracteres"
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none focus:border-slate-950"
             />
           </div>
@@ -112,9 +112,9 @@ export default async function SignupPage({
           </button>
 
           <p className="text-center text-sm text-slate-600">
-            ¿Ya tienes cuenta?{" "}
+            Â¿Ya tienes cuenta?{" "}
             <Link href="/login" className="font-semibold text-slate-950">
-              Iniciar sesión
+              Iniciar sesiÃ³n
             </Link>
           </p>
         </form>
@@ -122,3 +122,4 @@ export default async function SignupPage({
     </main>
   );
 }
+

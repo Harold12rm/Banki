@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/supabase/server";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -78,7 +78,7 @@ export default async function ReviewPage() {
       <section className="mx-auto max-w-6xl space-y-8">
         <header>
           <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Repetición espaciada
+            RepeticiÃ³n espaciada
           </p>
 
           <h1 className="mt-1 text-4xl font-bold tracking-tight text-slate-950">
@@ -87,7 +87,7 @@ export default async function ReviewPage() {
 
           <p className="mt-2 max-w-3xl text-base text-slate-700">
             Banki prioriza lo que debes volver a ver: preguntas pendientes,
-            falladas repetidamente y preguntas aún no dominadas.
+            falladas repetidamente y preguntas aÃºn no dominadas.
           </p>
         </header>
 
@@ -111,12 +111,12 @@ export default async function ReviewPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold text-slate-950">
-            Iniciar repaso rápido
+            Iniciar repaso rÃ¡pido
           </h2>
 
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            Recomendación: usa 10 preguntas para sesiones cortas. Usa 20 cuando
-            tengas más tiempo. El simulacro de 50 es para sesiones largas.
+            RecomendaciÃ³n: usa 10 preguntas para sesiones cortas. Usa 20 cuando
+            tengas mÃ¡s tiempo. El simulacro de 50 es para sesiones largas.
           </p>
 
           <div className="mt-5 grid gap-3 md:grid-cols-3">
@@ -178,7 +178,7 @@ export default async function ReviewPage() {
               {banks.map((bank) => (
                 <option key={bank.id} value={bank.id}>
                   {bank.name}
-                  {bank.subject ? ` · ${bank.subject}` : ""}
+                  {bank.subject ? ` Â· ${bank.subject}` : ""}
                 </option>
               ))}
             </select>
@@ -203,9 +203,9 @@ export default async function ReviewPage() {
               className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-950 outline-none focus:border-slate-950"
             >
               <option value="">Todas las dificultades</option>
-              <option value="easy">Fácil</option>
+              <option value="easy">FÃ¡cil</option>
               <option value="medium">Media</option>
-              <option value="hard">Difícil</option>
+              <option value="hard">DifÃ­cil</option>
             </select>
 
             <select
@@ -226,13 +226,13 @@ export default async function ReviewPage() {
 
         <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-xl font-bold text-slate-950">
-            Qué significa cada modo
+            QuÃ© significa cada modo
           </h2>
 
           <div className="mt-5 grid gap-4 md:grid-cols-2">
             <InfoCard
               title="Pendientes de repaso"
-              description="Preguntas cuyo próximo repaso ya venció. Son la prioridad del día."
+              description="Preguntas cuyo prÃ³ximo repaso ya venciÃ³. Son la prioridad del dÃ­a."
             />
 
             <InfoCard
@@ -242,7 +242,7 @@ export default async function ReviewPage() {
 
             <InfoCard
               title="Aprendiendo"
-              description="Preguntas que todavía no tienen suficientes aciertos espaciados para considerarse dominadas."
+              description="Preguntas que todavÃ­a no tienen suficientes aciertos espaciados para considerarse dominadas."
             />
 
             <InfoCard
@@ -252,12 +252,12 @@ export default async function ReviewPage() {
 
             <InfoCard
               title="Casi dominadas"
-              description="Preguntas con buena racha, pero que necesitan confirmación en días distintos."
+              description="Preguntas con buena racha, pero que necesitan confirmaciÃ³n en dÃ­as distintos."
             />
 
             <InfoCard
               title="Dominadas"
-              description="Preguntas respondidas correctamente varias veces en días distintos. Si las fallas otra vez, bajan de nivel."
+              description="Preguntas respondidas correctamente varias veces en dÃ­as distintos. Si las fallas otra vez, bajan de nivel."
             />
           </div>
         </section>
@@ -265,12 +265,12 @@ export default async function ReviewPage() {
         {progress.length === 0 && (
           <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
             <h2 className="text-xl font-bold text-slate-950">
-              Aún no hay historial de repaso
+              AÃºn no hay historial de repaso
             </h2>
 
             <p className="mt-2 text-slate-700">
-              Practica un banco y responde algunas preguntas. Banki empezará a
-              programar tus repasos automáticamente.
+              Practica un banco y responde algunas preguntas. Banki empezarÃ¡ a
+              programar tus repasos automÃ¡ticamente.
             </p>
 
             <Link

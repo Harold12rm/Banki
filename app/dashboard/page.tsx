@@ -1,4 +1,4 @@
-export const dynamic = "force-dynamic";
+﻿export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 import Link from "next/link";
@@ -64,11 +64,11 @@ export default async function DashboardPage() {
           </p>
 
           <h1 className="mt-1 text-4xl font-bold tracking-tight text-slate-950">
-            Continúa tu aprendizaje
+            ContinÃºa tu aprendizaje
           </h1>
 
           <p className="mt-2 max-w-3xl text-slate-700">
-            Hola {user.email}. Aquí tienes un resumen rápido de tu progreso y el
+            Hola {user.email}. AquÃ­ tienes un resumen rÃ¡pido de tu progreso y el
             mejor siguiente paso para estudiar.
           </p>
 
@@ -84,7 +84,7 @@ export default async function DashboardPage() {
               href="/practice"
               className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-slate-50 px-6 py-3 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-white"
             >
-              Elegir práctica
+              Elegir prÃ¡ctica
             </Link>
           </div>
         </header>
@@ -105,14 +105,14 @@ export default async function DashboardPage() {
           />
 
           <ActionCard
-            title="Estadísticas"
+            title="EstadÃ­sticas"
             description="Mira tu rendimiento por banco, tema y dificultad."
             href="/stats"
           />
 
           <ActionCard
             title="Bancos"
-            description="Explora bancos disponibles y empieza una sesión."
+            description="Explora bancos disponibles y empieza una sesiÃ³n."
             href="/banks"
           />
         </section>
@@ -149,3 +149,4 @@ function ActionCard({
     </Link>
   );
 }
+

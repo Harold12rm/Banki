@@ -1,4 +1,4 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 
 export default function UnauthorizedPage() {
   return (
@@ -13,7 +13,7 @@ export default function UnauthorizedPage() {
         </h1>
 
         <p className="mt-3 text-slate-700">
-          Esta secci�n est� reservada para administrar bancos, preguntas e importaciones.
+          Esta secciï¿½n estï¿½ reservada para administrar bancos, preguntas e importaciones.
         </p>
 
         <Link
@@ -26,3 +26,4 @@ export default function UnauthorizedPage() {
     </main>
   );
 }
+

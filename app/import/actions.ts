@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
@@ -75,9 +75,9 @@ function parseCorrectOption(value: string) {
 function normalizeDifficulty(value: string) {
   const clean = value.trim().toLowerCase();
 
-  if (["facil", "fácil", "easy"].includes(clean)) return "easy";
+  if (["facil", "fÃ¡cil", "easy"].includes(clean)) return "easy";
   if (["media", "medio", "medium"].includes(clean)) return "medium";
-  if (["dificil", "difícil", "hard"].includes(clean)) return "hard";
+  if (["dificil", "difÃ­cil", "hard"].includes(clean)) return "hard";
 
   return "medium";
 }
