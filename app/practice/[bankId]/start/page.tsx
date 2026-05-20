@@ -3,6 +3,9 @@ import { notFound, redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function getSafeLimit(value?: string) {
   const limit = Number(value);
 
@@ -233,6 +236,7 @@ export default async function PracticeStartPage({
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/practice"
+                prefetch={false}
                 className="inline-flex flex-1 items-center justify-center rounded-xl border border-red-200 bg-white px-5 py-3 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100"
               >
                 Cambiar modo
@@ -240,6 +244,7 @@ export default async function PracticeStartPage({
 
               <Link
                 href={`/practice/${bank.id}/start?limit=10`}
+                prefetch={false}
                 className="inline-flex flex-1 items-center justify-center rounded-xl border border-red-200 bg-white px-5 py-3 text-sm font-semibold text-red-700 shadow-sm transition hover:bg-red-100"
               >
                 Usar práctica general
@@ -291,6 +296,7 @@ export default async function PracticeStartPage({
             <div className="flex flex-col gap-3 sm:flex-row">
               <Link
                 href={startHref}
+                prefetch={false}
                 className="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-50"
               >
                 Empezar práctica
@@ -298,6 +304,7 @@ export default async function PracticeStartPage({
 
               <Link
                 href="/practice"
+                prefetch={false}
                 className="inline-flex flex-1 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-50"
               >
                 Cambiar modo

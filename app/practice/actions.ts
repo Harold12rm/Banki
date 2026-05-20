@@ -7,7 +7,6 @@ type SavePracticeAnswerInput = {
   bankId: string;
   questionId: string;
   selectedOptionId: string;
-  isCorrect: boolean;
 };
 
 function addMinutes(date: Date, minutes: number) {
@@ -147,8 +146,6 @@ function calculateProgressUpdate({
 }
 
 export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
-  console.log("INICIANDO savePracticeAnswer:", data);
-
   if (!data.bankId) {
     throw new Error("Falta el banco.");
   }
@@ -166,6 +163,33 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
 
   const userId = user.id;
 
+  const question = await prisma.question.findFirst({
+    where: {
+      id: data.questionId,
+      bankId: data.bankId,
+    },
+    select: {
+      id: true,
+      options: {
+        where: {
+          id: data.selectedOptionId,
+        },
+        select: {
+          id: true,
+          isCorrect: true,
+        },
+      },
+    },
+  });
+
+  const selectedOption = question?.options[0];
+
+  if (!question || !selectedOption) {
+    throw new Error("La respuesta no pertenece a esta pregunta.");
+  }
+
+  const isCorrect = selectedOption.isCorrect;
+
   const session = await prisma.practiceSession.create({
     data: {
       bankId: data.bankId,
@@ -175,19 +199,15 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
     },
   });
 
-  console.log("PracticeSession creada:", session.id);
-
   const answer = await prisma.sessionAnswer.create({
     data: {
       sessionId: session.id,
       questionId: data.questionId,
       selectedOptionId: data.selectedOptionId,
-      isCorrect: data.isCorrect,
+      isCorrect,
       answeredAt: now,
     },
   });
-
-  console.log("SessionAnswer creada:", answer.id);
 
   try {
     const currentProgress = await prisma.questionProgress.findUnique({
@@ -201,11 +221,11 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
 
     const progressUpdate = calculateProgressUpdate({
       progress: currentProgress,
-      isCorrect: data.isCorrect,
+      isCorrect,
       now,
     });
 
-    const progress = await prisma.questionProgress.upsert({
+    await prisma.questionProgress.upsert({
       where: {
         userId_questionId: {
           userId,
@@ -219,8 +239,6 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
         ...progressUpdate,
       },
     });
-
-    console.log("QuestionProgress actualizado:", progress.id);
   } catch (error) {
     console.error("Error actualizando QuestionProgress:", error);
   }
@@ -229,5 +247,6 @@ export async function savePracticeAnswer(data: SavePracticeAnswerInput) {
     saved: true,
     sessionId: session.id,
     answerId: answer.id,
+    isCorrect,
   };
 }

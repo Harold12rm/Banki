@@ -4,6 +4,9 @@ import PracticeSession from "@/components/PracticeSession";
 import { getCurrentUser } from "@/lib/supabase/server";
 import type { PracticeQuestion } from "@/lib/practice-question";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 function shuffleArray<T>(array: readonly T[]): T[] {
   return [...array].sort(() => Math.random() - 0.5);
 }

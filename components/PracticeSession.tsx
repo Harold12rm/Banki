@@ -137,16 +137,15 @@ export default function PracticeSession({
       setSaving(true);
       setSaveError("");
 
-      await savePracticeAnswer({
+      const result = await savePracticeAnswer({
         bankId,
         questionId: question.id,
         selectedOptionId: selectedOption.id,
-        isCorrect: selectedOption.isCorrect,
       });
 
       setAnswered(true);
 
-      if (selectedOption.isCorrect) {
+      if (result.isCorrect) {
         setCorrectCount((value) => value + 1);
       } else {
         setWrongQuestions((value) => [...value, question]);

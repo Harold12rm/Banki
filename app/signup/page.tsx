@@ -11,6 +11,7 @@ async function signup(formData: FormData) {
 
   const email = String(formData.get("email") || "").trim();
   const password = String(formData.get("password") || "");
+  const next = getSafeNextPath(String(formData.get("next") || ""));
 
   if (!email || !password) {
     redirect("/signup?error=Correo%20y%20contraseña%20son%20obligatorios.");
@@ -42,7 +43,7 @@ async function signup(formData: FormData) {
     });
   }
 
-  redirect("/dashboard");
+  redirect(next);
 }
 
 export default async function SignupPage({
@@ -50,6 +51,7 @@ export default async function SignupPage({
 }: {
   searchParams: Promise<{
     error?: string;
+    next?: string;
   }>;
 }) {
   const user = await getCurrentUser();
@@ -59,6 +61,7 @@ export default async function SignupPage({
   }
 
   const params = await searchParams;
+  const next = getSafeNextPath(params.next || "");
 
   return (
     <main className="min-h-screen bg-slate-100 px-6 py-10 text-slate-950">
@@ -87,6 +90,8 @@ export default async function SignupPage({
           action={signup}
           className="space-y-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
         >
+          <input name="next" type="hidden" value={next} />
+
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-800">
               Correo
@@ -122,7 +127,11 @@ export default async function SignupPage({
 
           <p className="text-center text-sm text-slate-600">
             ¿Ya tienes cuenta?{" "}
-            <Link href="/login" className="font-semibold text-slate-950">
+            <Link
+              href={`/login?next=${encodeURIComponent(next)}`}
+              className="font-semibold text-slate-950"
+              prefetch={false}
+            >
               Iniciar sesión
             </Link>
           </p>
@@ -130,5 +139,17 @@ export default async function SignupPage({
       </section>
     </main>
   );
+}
+
+function getSafeNextPath(value: string) {
+  if (!value.startsWith("/") || value.startsWith("//")) {
+    return "/dashboard";
+  }
+
+  if (value.startsWith("/login") || value.startsWith("/signup")) {
+    return "/dashboard";
+  }
+
+  return value;
 }
 

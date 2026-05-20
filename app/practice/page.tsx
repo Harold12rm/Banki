@@ -1,5 +1,7 @@
-﻿import Link from "next/link";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,10 +13,25 @@ type PracticeBank = {
   _count: {
     questions: number;
   };
+  available: {
+    all: number;
+    missed: number;
+    red: number;
+    due: number;
+    notMastered: number;
+  };
 };
 
 export default async function PracticePage() {
-  const banks: PracticeBank[] = await prisma.questionBank.findMany({
+  const user = await getCurrentUser();
+
+  if (!user) {
+    redirect("/login?next=/practice");
+  }
+
+  const now = new Date();
+
+  const bankRows = await prisma.questionBank.findMany({
     orderBy: {
       createdAt: "desc",
     },
@@ -26,6 +43,85 @@ export default async function PracticePage() {
       },
     },
   });
+
+  const banks: PracticeBank[] = await Promise.all(
+    bankRows.map(async (bank) => {
+      const [missed, red, due, notMastered] = await Promise.all([
+        prisma.question.count({
+          where: {
+            bankId: bank.id,
+            answers: {
+              some: {
+                isCorrect: false,
+                session: {
+                  userId: user.id,
+                },
+              },
+            },
+          },
+        }),
+        prisma.question.count({
+          where: {
+            bankId: bank.id,
+            progress: {
+              some: {
+                userId: user.id,
+                status: "red",
+              },
+            },
+          },
+        }),
+        prisma.question.count({
+          where: {
+            bankId: bank.id,
+            progress: {
+              some: {
+                userId: user.id,
+                nextReviewAt: {
+                  lte: now,
+                },
+              },
+            },
+          },
+        }),
+        prisma.question.count({
+          where: {
+            bankId: bank.id,
+            OR: [
+              {
+                progress: {
+                  none: {
+                    userId: user.id,
+                  },
+                },
+              },
+              {
+                progress: {
+                  some: {
+                    userId: user.id,
+                    status: {
+                      not: "mastered",
+                    },
+                  },
+                },
+              },
+            ],
+          },
+        }),
+      ]);
+
+      return {
+        ...bank,
+        available: {
+          all: bank._count.questions,
+          missed,
+          red,
+          due,
+          notMastered,
+        },
+      };
+    })
+  );
 
   return (
     <main className="min-h-screen bg-slate-100 px-6 py-10 text-slate-950">
@@ -112,6 +208,7 @@ export default async function PracticePage() {
             <div className="mt-5 flex flex-wrap gap-3">
               <Link
                 href="/banks/new"
+                prefetch={false}
                 className="inline-flex rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-50"
               >
                 Crear banco
@@ -119,6 +216,7 @@ export default async function PracticePage() {
 
               <Link
                 href="/import"
+                prefetch={false}
                 className="inline-flex rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-50"
               >
                 Importar CSV
@@ -151,6 +249,7 @@ export default async function PracticePage() {
 
                   <Link
                     href={`/banks/${bank.id}`}
+                    prefetch={false}
                     className="inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-50"
                   >
                     Gestionar banco
@@ -167,18 +266,21 @@ export default async function PracticePage() {
                       href={`/practice/${bank.id}/start?limit=10`}
                       title="Práctica rápida"
                       description="10 preguntas"
+                      available={bank.available.all}
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?limit=20`}
                       title="Práctica normal"
                       description="20 preguntas"
+                      available={bank.available.all}
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?limit=50`}
                       title="Simulacro"
                       description="50 preguntas"
+                      available={bank.available.all}
                     />
                   </div>
                 </div>
@@ -193,24 +295,28 @@ export default async function PracticePage() {
                       href={`/practice/${bank.id}/start?mode=missed&limit=10`}
                       title="Falladas"
                       description="Errores previos"
+                      available={bank.available.missed}
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?mode=red&limit=10`}
                       title="Zona roja"
                       description="Prioridad alta"
+                      available={bank.available.red}
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?mode=due&limit=10`}
                       title="Pendientes"
                       description="Repaso vencido"
+                      available={bank.available.due}
                     />
 
                     <PracticeButton
                       href={`/practice/${bank.id}/start?mode=not-mastered&limit=10`}
                       title="No dominadas"
                       description="Aún en aprendizaje"
+                      available={bank.available.notMastered}
                     />
                   </div>
                 </div>
@@ -260,14 +366,29 @@ function PracticeButton({
   href,
   title,
   description,
+  available,
 }: {
   href: string;
   title: string;
   description: string;
+  available: number;
 }) {
+  if (available === 0) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-slate-100 p-4 opacity-70">
+        <p className="text-sm font-bold text-slate-700">{title}</p>
+        <p className="mt-1 text-sm text-slate-500">{description}</p>
+        <p className="mt-3 text-xs font-semibold text-slate-500">
+          Sin preguntas disponibles
+        </p>
+      </div>
+    );
+  }
+
   return (
     <Link
       href={href}
+      prefetch={false}
       className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition hover:border-slate-300 hover:bg-white hover:shadow-sm"
     >
       <p className="text-sm font-bold text-slate-950 group-hover:text-black">
@@ -275,7 +396,9 @@ function PracticeButton({
       </p>
 
       <p className="mt-1 text-sm text-slate-600">{description}</p>
+      <p className="mt-3 text-xs font-semibold text-slate-500">
+        {available} disponibles
+      </p>
     </Link>
   );
 }
-
